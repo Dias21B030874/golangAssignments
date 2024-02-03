@@ -1,0 +1,8 @@
+// api/anime_data.json
+[
+  {"id": 1, "name": "Naruto Uzumaki", "age": 17, "series": "Naruto"},
+  {"id": 2, "name": "Luffy Monkey D.", "age": 19, "series": "One Piece"},
+  {"id": 3, "name": "Goku", "age": 35, "series": "Dragon Ball"},
+  {"id": 4, "name": "Edward Elric", "age": 18, "series": "Fullmetal Alchemist"}
+]
+
