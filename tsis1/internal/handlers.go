@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
-	"sync"
+	"fmt"
 
 	"github.com/gorilla/mux"
 )
@@ -17,72 +17,39 @@ type AnimeCharacter struct {
 	Series string `json:"series"`
 }
 
-type Database struct {
-	sync.RWMutex
-	Characters []AnimeCharacter
-}
 
-var animeDB = Database{}
+var filePath = "api/anime_data.json"
 
-func (db *Database) LoadDataFromFile(filePath string) error {
-	db.Lock()
-	defer db.Unlock()
-
+func loadAnimeData() ([]AnimeCharacter, error) {
 	fileContent, err := ioutil.ReadFile(filePath)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	err = json.Unmarshal(fileContent, &db.Characters)
+	var characters []AnimeCharacter
+	err = json.Unmarshal(fileContent, &characters)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return characters, nil
 }
-
-func (db *Database) GetAnimeList() []AnimeCharacter {
-	db.RLock()
-	defer db.RUnlock()
-	return db.Characters
-}
-
-func (db *Database) GetAnimeDetails(id int) (AnimeCharacter, bool) {
-	db.RLock()
-	defer db.RUnlock()
-
-	for _, character := range db.Characters {
-		if character.ID == id {
-			return character, true
-		}
-	}
-
-	return AnimeCharacter{}, false
-}
-
-filePath := "api/anime_data.json"
 
 func GetAnimeList(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	// Load data from the JSON file before fetching the list
-	if err := animeDB.LoadDataFromFile(filepath); err != nil {
+	characters, err := loadAnimeData()
+	if err != nil {
+		fmt.Println("Error loading anime data:", err)
 		http.Error(w, "Failed to load anime data", http.StatusInternalServerError)
 		return
 	}
 
-	characters := animeDB.GetAnimeList()
 	json.NewEncoder(w).Encode(characters)
 }
 
 func GetAnimeDetails(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-
-	// Load data from the JSON file before fetching details
-	if err := animeDB.LoadDataFromFile(filepath); err != nil {
-		http.Error(w, "Failed to load anime data", http.StatusInternalServerError)
-		return
-	}
 
 	params := mux.Vars(r)
 	characterID, err := strconv.Atoi(params["id"])
@@ -91,9 +58,26 @@ func GetAnimeDetails(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	character, found := animeDB.GetAnimeDetails(characterID)
+	characters, err := loadAnimeData()
+	if err != nil {
+		fmt.Println("Error loading anime data:", err)
+		http.Error(w, "Failed to load anime data", http.StatusInternalServerError)
+		return
+	}
+
+	var foundCharacter AnimeCharacter
+	found := false
+
+	for _, character := range characters {
+		if character.ID == characterID {
+			foundCharacter = character
+			found = true
+			break
+		}
+	}
+
 	if found {
-		json.NewEncoder(w).Encode(character)
+		json.NewEncoder(w).Encode(foundCharacter)
 	} else {
 		http.Error(w, "Character not found", http.StatusNotFound)
 	}

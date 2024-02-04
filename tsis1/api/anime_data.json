@@ -1,8 +1,18 @@
-// api/anime_data.json
 [
   {"id": 1, "name": "Naruto Uzumaki", "age": 17, "series": "Naruto"},
   {"id": 2, "name": "Luffy Monkey D.", "age": 19, "series": "One Piece"},
   {"id": 3, "name": "Goku", "age": 35, "series": "Dragon Ball"},
-  {"id": 4, "name": "Edward Elric", "age": 18, "series": "Fullmetal Alchemist"}
-]
+  {"id": 4, "name": "Edward Elric", "age": 18, "series": "Fullmetal Alchemist"},
+  {"id": 5, "name": "Ichigo Kurosaki", "age": 17, "series": "Bleach"},
+  {"id": 6, "name": "Eren Yeager", "age": 19, "series": "Attack on Titan"},
+  {"id": 7, "name": "Light Yagami", "age": 23, "series": "Death Note"},
+  {"id": 8, "name": "Saitama", "age": 25, "series": "One Punch Man"},
+  {"id": 9, "name": "Sakura Haruno", "age": 18, "series": "Naruto"},
+  {"id": 10, "name": "Vegeta", "age": 39, "series": "Dragon Ball Z"},
+  {"id": 11, "name": "Gon Freecss", "age": 12, "series": "Hunter x Hunter"},
+  {"id": 12, "name": "Mikasa Ackerman", "age": 19, "series": "Attack on Titan"},
+  {"id": 13, "name": "Inuyasha", "age": 200, "series": "Inuyasha"},
+  {"id": 14, "name": "Usagi Tsukino", "age": 14, "series": "Sailor Moon"},
+  {"id": 15, "name": "Gintoki Sakata", "age": 29, "series": "Gintama"}
 
+]
